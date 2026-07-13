@@ -2,7 +2,7 @@ import connectDB from "../lib/db";
 import "@/lib/models";
 import { Board, Column, JobApplication } from "@/lib/models";
 
-const USER_ID = "6a18ad660131621b2b093833";
+const USER_ID = "6a53be198acd5c95295b2529";
 
 const SAMPLE_JOBS = [
   // Wish List
