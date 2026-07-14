@@ -91,9 +91,9 @@ function DroppableColumn({
     },
   });
 
-  // const sortedJobs = column.jobApplications?.sort((a, b) => a.order - b.order);
-  const sortedJobs =
-    column.jobApplications?.sort((a, b) => a.order - b.order) || [];
+  const sortedJobs = column.jobApplications?.sort((a, b) => a.order - b.order);
+  // const sortedJobs =
+  //   column.jobApplications?.sort((a, b) => a.order - b.order) || [];
 
   return (
     <Card className="min-w-[300] shrink-0 shadow-md p-0">

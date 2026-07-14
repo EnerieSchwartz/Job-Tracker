@@ -28,7 +28,8 @@ export function useBoard(initialBoard?: Board | null) {
  setColumns((prev) => {
       const newColumns = prev.map((col) => ({
         ...col,
-        jobApplications: [...col.jobApplications],
+        // jobApplications: [...col.jobApplications],
+        jobApplications: [...(col.jobApplications ?? [])],
       }));
 
 
@@ -37,7 +38,10 @@ export function useBoard(initialBoard?: Board | null) {
       let oldColumnId: string | null = null;
 
       for (const col of newColumns) {
-        const jobIndex = col.jobApplications.findIndex(
+        // const jobIndex = col.jobApplications.findIndex(
+        //   (job) => job._id === jobApplicationId,
+        // );
+        const jobIndex = (col.jobApplications ?? []).findIndex(
           (job) => job._id === jobApplicationId,
         );
         if(jobIndex !== -1 && jobIndex !== undefined) {
