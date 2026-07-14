@@ -1,6 +1,5 @@
 "use server";
 
-import { error } from "console";
 import { getSession } from "../auth/auth";
 import connectDB from "../db";
 import { Board, Column, JobApplication } from "../models";
