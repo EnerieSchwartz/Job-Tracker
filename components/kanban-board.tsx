@@ -21,7 +21,7 @@ import { Button } from "./ui/button";
 import CreateJobApplicationDialog from "./ui/create-job-dialog";
 import JobApplicationCard from "@/components/job-application-card";
 import { useBoard } from "@/lib/hooks/useBoards";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   closestCorners,
   DndContext,
@@ -188,6 +188,12 @@ function SortableJobCard({
 }
 
 export default function KanbanBoard({ board, userId }: KanbanBoardProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const [activeId, setActiveId] = useState<string | null>(null);
 
   const { columns, moveJob } = useBoard(board);
@@ -297,6 +303,34 @@ export default function KanbanBoard({ board, userId }: KanbanBoardProps) {
   const activeJob = sortedColumns
     .flatMap((col) => col.jobApplications || [])
     .find((job) => job._id === activeId);
+
+  const boardContent = (
+    <div className="space-y-4">
+      <div className="flex gap-4 overflow-x-auto pb-4">
+        {(sortedColumns ?? []).map((col, key) => {
+          const config = COLUMN_CONFIG[key] || {
+            color: "bg-cyan-500",
+            icon: <Calendar className="h-4 w-4" />,
+          };
+
+          return (
+            <DroppableColumn
+              key={col._id}
+              column={col}
+              config={config}
+              boardId={board._id}
+              sortedColumns={sortedColumns}
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  if (!mounted) {
+    // render the board without DnD
+    return boardContent;
+  }
   return (
     <DndContext
       sensors={sensors}
@@ -304,26 +338,7 @@ export default function KanbanBoard({ board, userId }: KanbanBoardProps) {
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <div className="space-y-4">
-        <div className="flex gap-4 overflow-x-auto pb-4">
-          {/* {columns.map((col, key) => { */}
-          {(sortedColumns ?? []).map((col, key) => {
-            const config = COLUMN_CONFIG[key] || {
-              color: "bg-cyan-500",
-              icon: <Calendar className="h-4 w-4" />,
-            };
-            return (
-              <DroppableColumn
-                key={key}
-                column={col}
-                config={config}
-                boardId={board._id}
-                sortedColumns={sortedColumns}
-              />
-            );
-          })}
-        </div>
-      </div>
+      {boardContent}
 
       <DragOverlay>
         {activeJob ? (
